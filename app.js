@@ -1,7 +1,8 @@
 const express = require('express')
-const exphbs = require('express-handlebars')
+const {engine, create} = require('express-handlebars')
 const bodyParser = require('body-parser')
 const path = require('path')
+const hbs = create({ /* config */ });
 
 const app = express()
 const db = require('./config/database')
@@ -11,7 +12,15 @@ const db = require('./config/database')
  .then(() => console.log('Database connected ----------------->'))
  .catch(error => console.log('Error: ', error))
 
-app.get("/", (req, res) => res.send('INDEX'))
+ // HandleBars
+app.engine('handlebars', hbs.engine)
+app.set('view engine', "handlebars")
+app.set('views', './views');
+
+app.get("/", (req, res) => res.render('index', { layout: 'landing' }))
+
+// Set static folders
+app.use(express.static(path.join(__dirname, 'public')))
 
 // GIG routes
 app.use('/gigs', require('./routes/gigs'))
