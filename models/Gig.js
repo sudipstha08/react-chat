@@ -18,5 +18,5 @@ const Gig = db.define('gig', {
       type: Sequelize.STRING
    }
 })
-
-module.export = Gig
+   
+module.exports = Gig
